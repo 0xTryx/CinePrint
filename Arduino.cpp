@@ -5,10 +5,10 @@
 // CONFIGURATION RÉSEAU
 // -------------------------------------------------------------
 // Remplacez l'adresse MAC par celle inscrite sur votre shield Ethernet
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+byte mac[] = { 0xAE, 0x61, 0x0A, 0xAF, 0x87, 0xC6 };
 
 // Adresse IP fixe attribuée à la carte Arduino
-IPAddress ip(192, 168, 1, 200);
+IPAddress ip(172, 18, 197, 99);
 
 // Port d'écoute du serveur TCP (ex: 8080 ou 23)
 EthernetServer server(8080);
@@ -18,7 +18,7 @@ String bufferTCP = "";
 
 // -------------------------------------------------------------
 // FONCTION DE TRAITEMENT ET DE RÉPONSE PROTOCOLE
-// -------------------------------------------------------------
+// ------------------------------------------------------------- 
 String traiterCommande(String trame) {
   trame.trim();
   if (trame.length() == 0) return "";
