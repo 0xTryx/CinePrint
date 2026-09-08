@@ -1,6 +1,6 @@
 import socket
 
-HOST = "192.168.1.200"
+HOST = "172.18.197.99"
 PORT = 8080
 
 def send(sock, cmd):
@@ -18,3 +18,4 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
     # Write (ESC @ = reset imprimante thermique)
     print(send(s, "2,2,1B;40"))
+
