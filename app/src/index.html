@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CinePrint</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <button id="btn-ping">Ping</button>
+        <button id="btn-test">Test print</button>
+        <button id="btn-reset">Reset (ESC @)</button>
+
+        <script src="bridge.js"></script>
+        <script>
+        const send = (msg) => window.api.invoke('tcp-send', 'localhost', 8082, msg).then(console.log)
+
+        document.getElementById('btn-ping').onclick = () => send('0,ping')
+        document.getElementById('btn-test').onclick = () => send('1,test aaa 1234567890')
+        document.getElementById('btn-reset').onclick = () => send('2, 2, 1B;40')
+        </script>
+    </body>
+</html>
