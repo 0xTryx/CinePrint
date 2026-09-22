@@ -2,7 +2,7 @@
 #include <Ethernet.h>
 
 byte mac[] = { 0xA8, 0x61, 0x0A, 0xAE, 0x83, 0x9C };
-IPAddress ip(172, 18, 197, 99);
+IPAddress ip(172, 18, 197, 128);
 EthernetServer server(8080);
 
 String bufferTCP = "";
@@ -59,12 +59,12 @@ void setup() {
   Serial.begin(9600);
 
   // ------------------------------------------------------------------
-  // OPTIMISATION DE LA QUALITÉ D'IMPRESSION (ESC 7 n1 n2 n3)
+  // CHAUFFE MAXIMALE ET IMPRESSION TRÈS LENTE (ESC 7 n1 n2 n3)
   // ------------------------------------------------------------------
-  // n1 = 0x09 : Maximum de points chauffés simultanément (80 points)
-  // n2 = 0xA0 : Temps de chauffe élevé (1600 µs au lieu de 800 µs) -> ralentit l'impression mais fonce le noir
-  // n3 = 0x0A : Temps d'intervalle augmenté (100 µs) -> évite de baver et rend les contours très nets
-  uint8_t initHeating[] = { 0x1B, 0x37, 0x09, 0xA0, 0x0A };
+  // n1 = 0x07 : 64 points chauffés simultanément pour éviter la chute de tension
+  // n2 = 0xFF : Temps de chauffe MAXIMAL (2550 µs) pour un noir très intense
+  // n3 = 0x14 : Temps de repos prolongé (200 µs) pour laisser le papier réagir
+  uint8_t initHeating[] = { 0x1B, 0x37, 0x07, 0xFF, 0x14 };
   Serial.write(initHeating, 5);
 
   Ethernet.begin(mac, ip);
