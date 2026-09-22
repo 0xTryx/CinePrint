@@ -587,6 +587,5 @@ Arduino :
 
 ## 👨‍💻 Développement
 
-Projet réalisé dans le cadre du développement d'un système d'impression réseau pour cinéma.
+Projet réalisé par des étudiants dans le cadre du BTS CIEL option IR.
 
-Contributions et améliorations bienvenues.
