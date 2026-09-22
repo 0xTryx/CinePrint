@@ -1,0 +1,9 @@
+## .NET / Visual Studio
+bin/
+obj/
+*.user
+.vs/
+
+## Rider / VS Code
+.idea/
+*.swp
