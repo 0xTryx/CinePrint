@@ -4,23 +4,21 @@ using QRCoder;
 namespace cineprint
 {
     /// <summary>
-    /// Generation d'un QR code (encodage via QRCoder) sous forme de matrice de bits,
-    /// convertie ensuite en commande ESC/POS via EscPosImage.CommandeDepuisMatriceBinaire.
-    /// Pas besoin de commande "QR code" native de l'imprimante : on l'imprime comme une image,
-    /// via le meme chemin GS v 0 deja teste et fonctionnel.
+    /// Generation d'un QR code (encodage via QRCoder) sous forme de matrice de bits.
+    /// Il est imprime comme une image raster GS v 0 (EscPosImage.CommandeDepuisMatriceBinaire),
+    /// sans utiliser la commande QR native de l'imprimante.
     /// </summary>
     public static class EscPosQrCode
     {
-        // Marge de securite (quiet zone) autour du QR code, recommandee par la norme
-        // pour que les scanners l'identifient correctement.
+        // Marge blanche ajoutee autour de la matrice QRCoder (qui contient deja une zone de silence de 4 modules).
         private const int ZoneBlanche = 4;
 
         /// <summary>Encode le contenu (lien ou texte) en matrice de modules noir/blanc, marge incluse.</summary>
         public static bool[,] GenererMatrice(string contenu)
         {
             using QRCodeGenerator generateur = new();
-            // Niveau M (15% de correction) : bon compromis lisibilite/taille pour un lien court.
-            // Q ou H generent une matrice plus dense (donc plus d'octets a transmettre) pour le meme contenu.
+            // Correction d'erreur niveau M (~15 %). Q ou H donnent une matrice plus dense,
+            // donc plus d'octets a envoyer pour le meme contenu.
             QRCodeData data = generateur.CreateQrCode(contenu, QRCodeGenerator.ECCLevel.M);
 
             int taille = data.ModuleMatrix.Count;
@@ -34,7 +32,7 @@ namespace cineprint
             return matrice;
         }
 
-        /// <summary>Rendu Bitmap pour l'apercu dans l'UI (taille d'affichage, independante de l'impression).</summary>
+        /// <summary>Rendu Bitmap de la matrice (pixelsParModule pixels par module), independant de l'impression.</summary>
         public static Bitmap GenererApercu(bool[,] matrice, int pixelsParModule = 6)
         {
             int taille = matrice.GetLength(0);

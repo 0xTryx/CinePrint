@@ -41,7 +41,7 @@ namespace cineprint
 
             byte[] pixels = new byte[largeurOctets * hauteurPoints]; // 1 octet = 8 points horizontaux
 
-            // Dithering Floyd-Steinberg : rendu bien plus lisible qu'un simple seuillage
+            // Tramage Floyd-Steinberg : l'erreur de quantification est diffusee aux voisins (7/16, 3/16, 5/16, 1/16)
             for (int y = 0; y < hauteurPoints; y++)
             {
                 for (int x = 0; x < largeurReelle; x++)
@@ -73,7 +73,7 @@ namespace cineprint
         /// <summary>
         /// Construit une commande ESC/POS GS v 0 a partir d'une matrice de bits pure
         /// (vrai/faux = noir/blanc), chaque case etant agrandie a la taille voulue en points.
-        /// Utilise pour les QR codes : pas de dithering necessaire, c'est deja du noir/blanc net.
+        /// Utilise pour les QR codes (matrice deja binaire, pas de tramage).
         /// </summary>
         public static byte[] CommandeDepuisMatriceBinaire(bool[,] matrice, int pointsParModule)
         {
@@ -125,8 +125,35 @@ namespace cineprint
         }
 
         /// <summary>
-        /// Decoupe une commande ESC/POS en plusieurs trames protocole "2,len,hexa" de taille
-        /// bornee, pour ne jamais depasser ce que l'Arduino Uno peut encaisser en une fois.
+        /// Reconstruit l'image imprimee (1 bit par point) a partir d'une commande GS v 0,
+        /// pour l'apercu du rendu thermique.
+        /// </summary>
+        public static Bitmap ApercuDepuisCommande(byte[] commande, Color papier, Color encre)
+        {
+            int largeurOctets = commande[4] | (commande[5] << 8);
+            int hauteurPoints = commande[6] | (commande[7] << 8);
+            int largeurPoints = largeurOctets * 8;
+
+            Bitmap bmp = new(largeurPoints, hauteurPoints, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var data = bmp.LockBits(new Rectangle(0, 0, largeurPoints, hauteurPoints),
+                System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            int[] pixels = new int[largeurPoints * hauteurPoints];
+            int argbPapier = papier.ToArgb(), argbEncre = encre.ToArgb();
+            for (int y = 0; y < hauteurPoints; y++)
+                for (int x = 0; x < largeurPoints; x++)
+                {
+                    byte octet = commande[8 + y * largeurOctets + x / 8];
+                    bool noir = (octet & (1 << (7 - x % 8))) != 0;
+                    pixels[y * largeurPoints + x] = noir ? argbEncre : argbPapier;
+                }
+            System.Runtime.InteropServices.Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
+            bmp.UnlockBits(data);
+            return bmp;
+        }
+
+        /// <summary>
+        /// Decoupe une commande ESC/POS en trames "2,len,hexa" de taille bornee
+        /// (tampon de reception limite de l'Arduino Uno).
         /// </summary>
         public static List<string> Decouper(byte[] commande, int octetsParTrame)
         {

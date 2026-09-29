@@ -50,12 +50,15 @@ namespace cineprint
 
         // --- Ticket complet ---
 
+        /// <summary>Ligne date/heure imprimee sur le ticket (partagee avec l'apercu de l'interface).</summary>
+        public static string FormatSeance(DateTime seance) => seance.ToString("dd/MM/yyyy 'a' HH'h'mm");
+
         /// <summary>
         /// Genere la sequence de trames a envoyer pour imprimer un ticket de cinema.
         /// </summary>
         public static List<string> Ticket(string cinema, string film, int salle, DateTime seance)
         {
-            string dateHeure = seance.ToString("dd/MM/yyyy 'a' HH'h'mm");
+            string dateHeure = FormatSeance(seance);
 
             return new List<string>
             {
