@@ -52,11 +52,11 @@ namespace cineprint
             champ_port.Text = "8080";
             champ_film.Suggestions = new[]
             {
-                "Dune - Deuxieme partie",
-                "Inception",
-                "Interstellar",
-                "Le Voyage de Chihiro",
-                "Oppenheimer",
+                "Film de test 1",
+                "Film de test 2",
+                "Film de test 3",
+                "Film de test 4",
+                "Film de test 5",
             };
             champ_film.Text = champ_film.Suggestions[0];
             compteur_salle.Valeur = 1;
