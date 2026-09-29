@@ -54,4 +54,4 @@ Exemple : `2,2,1B;40` envoie `ESC @`, la commande d'initialisation de l'impriman
 
 ## 👨‍💻 Développement
 
-Projet réalisé par des étudiants dans le cadre du **BTS CIEL, option IR**. CinePrint est en cours de développement ; les contributions sont les bienvenues.
+Projet réalisé dans le cadre du **BTS CIEL, option IR**. Il n’est plus maintenu et a été conçu à des fins pédagogiques : son utilisation pour un usage réel est déconseillée.
