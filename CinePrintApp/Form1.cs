@@ -57,6 +57,7 @@ namespace cineprint
                 "Film de test 3",
                 "Film de test 4",
                 "Film de test 5",
+                "Film de test 6",
             };
             champ_film.Text = champ_film.Suggestions[0];
             compteur_salle.Valeur = 1;
