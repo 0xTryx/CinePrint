@@ -1,0 +1,23 @@
+// -------------------------------------------------------------
+// Impression d'une image ESC/POS (bitmap noir & blanc)
+// -------------------------------------------------------------
+void imprimerImage(const uint8_t *bitmap, int width, int height) {
+
+  // Commande ESC/POS : GS v 0
+  Serial.write(0x1D);
+  Serial.write(0x76);
+  Serial.write(0x30);
+  Serial.write(0x00);   // mode normal
+
+  // Largeur en bytes (8 pixels par byte)
+  int widthBytes = (width + 7) / 8;
+
+  // Envoi largeur et hauteur (LSB/MSB)
+  Serial.write(widthBytes & 0xFF);
+  Serial.write((widthBytes >> 8) & 0xFF);
+  Serial.write(height & 0xFF);
+  Serial.write((height >> 8) & 0xFF);
+
+  // Envoi du bitmap brut
+  Serial.write(bitmap, widthBytes * height);
+}
